@@ -1,17 +1,23 @@
+
 import React, { useState, useEffect } from 'react';
-import { Search, Menu, Globe, X } from 'lucide-react';
-import { ViewType } from '../types';
+import { Search, Menu, Globe, X, User as UserIcon, LogOut } from 'lucide-react';
+import { ViewType, User } from '../types';
 import { useLanguage } from '../contexts/LanguageContext';
 
 interface HeaderProps {
   currentView: ViewType;
   onNavigate: (view: ViewType) => void;
+  user: User | null;
+  onSearchClick: () => void;
+  onLoginClick: () => void;
+  onLogout: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
+export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate, user, onSearchClick, onLoginClick, onLogout }) => {
   const { t, language, toggleLanguage } = useLanguage();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -62,16 +68,46 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
 
           {/* Right Tools */}
           <div className="flex items-center space-x-6">
-             <button className="hidden md:block text-white hover:text-mantle-green transition-colors">
+             <button 
+               onClick={onSearchClick}
+               className="text-white hover:text-mantle-green transition-colors p-2"
+             >
                 <Search className="w-5 h-5" />
              </button>
              
-             <button 
-                onClick={toggleLanguage}
-                className="text-xs font-bold text-white uppercase border border-white/30 px-3 py-1 rounded-full hover:bg-white hover:text-black transition-all"
-             >
-                {language === 'en' ? 'EN' : 'KO'}
-             </button>
+             {user ? (
+               <div className="relative">
+                  <button 
+                    onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
+                    className="flex items-center gap-3 bg-white/5 border border-white/10 px-3 py-1.5 hover:bg-white/10 transition-all"
+                  >
+                    <div className="w-6 h-6 bg-neutral-800 grayscale overflow-hidden shrink-0">
+                      <img src={user.profileImage} alt={user.name} />
+                    </div>
+                    <span className="hidden sm:block text-[10px] font-black text-white uppercase tracking-widest">
+                       {user.walletAddress ? `${user.walletAddress.substring(0, 6)}...` : user.name}
+                    </span>
+                  </button>
+                  
+                  {isProfileMenuOpen && (
+                    <div className="absolute right-0 mt-2 w-48 bg-zinc-900 border border-white/10 py-2 shadow-2xl">
+                       <button onClick={() => { onNavigate('mypage'); setIsProfileMenuOpen(false); }} className="w-full px-6 py-3 text-left text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-white hover:bg-white/5 flex items-center gap-3">
+                          <UserIcon className="w-3.5 h-3.5" /> My Profile
+                       </button>
+                       <button onClick={() => { onLogout(); setIsProfileMenuOpen(false); }} className="w-full px-6 py-3 text-left text-[10px] font-black uppercase tracking-widest text-red-500 hover:bg-white/5 flex items-center gap-3 border-t border-white/5 mt-1">
+                          <LogOut className="w-3.5 h-3.5" /> Logout
+                       </button>
+                    </div>
+                  )}
+               </div>
+             ) : (
+               <button 
+                onClick={onLoginClick}
+                className="text-[10px] font-black text-white uppercase border border-white/30 px-6 py-2 hover:bg-white hover:text-black transition-all tracking-[0.2em]"
+               >
+                  Login
+               </button>
+             )}
              
              <button 
                className="md:hidden text-white"
@@ -95,6 +131,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
            <button onClick={() => { onNavigate('home'); setIsMobileMenuOpen(false); }} className="text-2xl font-black uppercase text-white">Home</button>
            <button onClick={() => { onNavigate('funding'); setIsMobileMenuOpen(false); }} className="text-2xl font-black uppercase text-white">Roster</button>
            <button onClick={() => { onNavigate('market'); setIsMobileMenuOpen(false); }} className="text-2xl font-black uppercase text-white">Market</button>
+           {user && <button onClick={() => { onNavigate('mypage'); setIsMobileMenuOpen(false); }} className="text-2xl font-black uppercase text-white">My Page</button>}
         </div>
       )}
     </>

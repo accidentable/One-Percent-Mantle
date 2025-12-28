@@ -1,5 +1,6 @@
+
 export type ArtistStatus = 'funding' | 'market';
-export type ViewType = 'home' | 'funding' | 'market';
+export type ViewType = 'home' | 'funding' | 'market' | 'mypage';
 export type Language = 'en' | 'ko';
 
 export interface Artist {
@@ -25,6 +26,16 @@ export interface Artist {
   imageUrl: string;
   isTrending: boolean;
   category: 'Trending' | 'New Arrivals' | 'Debut Soon';
+}
+
+export interface User {
+  id: string;
+  name: string;
+  email?: string;
+  walletAddress?: string;
+  profileImage: string;
+  provider: 'google' | 'x' | 'wallet';
+  balance: number;
 }
 
 export type FilterCategory = 'Trending' | 'New Arrivals' | 'Debut Soon';

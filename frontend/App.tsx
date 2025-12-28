@@ -7,14 +7,21 @@ import { ArtistDetail } from './components/ArtistDetail';
 import { TrustBanner } from './components/TrustBanner';
 import { FundingPage } from './components/FundingPage';
 import { MarketPage } from './components/MarketPage';
-import { Artist, ViewType } from './types';
-import { ArrowRight, ArrowUpRight } from 'lucide-react';
+import { MyPage } from './components/MyPage';
+import { SearchOverlay } from './components/SearchOverlay';
+import { LoginModal } from './components/LoginModal';
+import { Artist, ViewType, User } from './types';
 import { useLanguage } from './contexts/LanguageContext';
 
 const App: React.FC = () => {
   const { t } = useLanguage();
   const [currentView, setCurrentView] = useState<ViewType>('home');
   const [selectedArtist, setSelectedArtist] = useState<Artist | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+  
+  // UI States
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
   // Handler for navigation
   const handleNavigate = (view: ViewType) => {
@@ -29,9 +36,35 @@ const App: React.FC = () => {
     window.scrollTo(0, 0);
   };
 
+  // Simulated Login
+  const handleLogin = (provider: 'google' | 'x' | 'wallet') => {
+    const mockUser: User = {
+      id: 'user_1',
+      name: 'Alpha_Fan',
+      profileImage: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200&auto=format&fit=crop',
+      provider,
+      balance: 12450,
+      walletAddress: provider === 'wallet' ? '0x71C7...fD45' : undefined
+    };
+    setUser(mockUser);
+    setIsLoginModalOpen(false);
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+    if (currentView === 'mypage') setCurrentView('home');
+  };
+
   return (
     <div className="min-h-screen bg-mantle-black text-white font-sans selection:bg-white selection:text-black">
-      <Header currentView={currentView} onNavigate={handleNavigate} />
+      <Header 
+        currentView={currentView} 
+        onNavigate={handleNavigate} 
+        user={user}
+        onSearchClick={() => setIsSearchOpen(true)}
+        onLoginClick={() => setIsLoginModalOpen(true)}
+        onLogout={handleLogout}
+      />
       
       {/* Global Background Abstract Elements */}
       <div className="fixed inset-0 z-0 pointer-events-none">
@@ -97,6 +130,7 @@ const App: React.FC = () => {
 
                          {/* Content Overlay */}
                          <div className="absolute inset-0 p-10 md:p-20 flex flex-col justify-between z-20">
+                            {/* Division Number & Badge */}
                             <div className="flex justify-between items-start">
                                <div className="flex items-center gap-6">
                                   <div className="w-14 h-14 border border-white/20 rounded-full flex items-center justify-center bg-black/60 backdrop-blur-xl group-hover:bg-mantle-green group-hover:text-black group-hover:border-mantle-green transition-all duration-500">
@@ -104,7 +138,6 @@ const App: React.FC = () => {
                                   </div>
                                   <span className="text-[11px] font-black tracking-[0.4em] uppercase text-gray-500 group-hover:text-white transition-colors">Incubation</span>
                                </div>
-                               <ArrowUpRight className="w-12 h-12 text-white opacity-0 group-hover:opacity-100 transition-all duration-500 transform group-hover:translate-x-3 group-hover:-translate-y-3" />
                             </div>
 
                             <div className="space-y-10">
@@ -118,7 +151,7 @@ const App: React.FC = () => {
                                      Discover raw potential. Access monthly evaluation data and support the debut journey of our elite trainees.
                                   </p>
                                   <div className="inline-flex items-center gap-4 text-xs font-black uppercase tracking-[0.4em] text-white group-hover:text-mantle-green transition-colors">
-                                     Enter Lab <ArrowRight className="w-6 h-6 group-hover:translate-x-3 transition-transform" />
+                                     Enter Lab 
                                   </div>
                                </div>
                             </div>
@@ -151,7 +184,6 @@ const App: React.FC = () => {
                                   </div>
                                   <span className="text-[11px] font-black tracking-[0.4em] uppercase text-gray-500 group-hover:text-white transition-colors">Main Label</span>
                                </div>
-                               <ArrowUpRight className="w-12 h-12 text-white opacity-0 group-hover:opacity-100 transition-all duration-500 transform group-hover:translate-x-3 group-hover:-translate-y-3" />
                             </div>
 
                             <div className="space-y-10">
@@ -165,7 +197,7 @@ const App: React.FC = () => {
                                      Trade the value of established icons. Our proprietary 1% revenue burn mechanism is active.
                                   </p>
                                   <div className="inline-flex items-center gap-4 text-xs font-black uppercase tracking-[0.4em] text-white group-hover:text-purple-400 transition-colors">
-                                     Enter Market <ArrowRight className="w-6 h-6 group-hover:translate-x-3 transition-transform" />
+                                     Enter Market 
                                   </div>
                                </div>
                             </div>
@@ -180,9 +212,22 @@ const App: React.FC = () => {
             {/* Sub Pages */}
             {currentView === 'funding' && <FundingPage onArtistSelect={handleArtistSelect} />}
             {currentView === 'market' && <MarketPage onArtistSelect={handleArtistSelect} />}
+            {currentView === 'mypage' && user && <MyPage user={user} onArtistSelect={handleArtistSelect} />}
           </>
         )}
       </div>
+
+      {/* Overlays */}
+      <SearchOverlay 
+        isOpen={isSearchOpen} 
+        onClose={() => setIsSearchOpen(false)} 
+        onArtistSelect={handleArtistSelect}
+      />
+      <LoginModal 
+        isOpen={isLoginModalOpen} 
+        onClose={() => setIsLoginModalOpen(false)} 
+        onLogin={handleLogin}
+      />
 
       <TrustBanner />
       
