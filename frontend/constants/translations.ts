@@ -2,9 +2,9 @@ export const translations = {
   en: {
     nav: {
       home: 'Home',
-      funding: 'Trainee Lab',
-      market: 'Main Stage',
-      connect: 'Connect Wallet',
+      funding: 'Roster',
+      market: 'Market',
+      connect: 'Connect',
       searchPlaceholder: 'Search artists, agencies...',
     },
     hero: {
@@ -30,11 +30,11 @@ export const translations = {
       users: 'Users',
     },
     filters: {
-      trending: 'Trending',
-      new: 'New Arrivals',
-      debut: 'Debut Soon',
+      trending: 'SPOTLIGHT',
+      new: 'NEW FACES',
+      debut: 'DEBUT CLASS',
       agency: 'Agency',
-      selectAgency: 'Select Agency',
+      selectAgency: 'All Agencies',
     },
     card: {
       fixed: 'Fixed',
@@ -139,8 +139,8 @@ export const translations = {
   ko: {
     nav: {
       home: '홈',
-      funding: '연습생 연구소',
-      market: '메인 스테이지',
+      funding: '연습생 명단',
+      market: '마켓',
       connect: '지갑 연결',
       searchPlaceholder: '아티스트, 소속사 검색...',
     },
@@ -167,11 +167,11 @@ export const translations = {
       users: '명 접속중',
     },
     filters: {
-      trending: '트렌딩',
-      new: '신규',
-      debut: '데뷔 임박',
+      trending: '스포트라이트',
+      new: '뉴 페이스',
+      debut: '데뷔 클래스',
       agency: '소속사',
-      selectAgency: '소속사 선택',
+      selectAgency: '소속사 전체',
     },
     card: {
       fixed: '고정가',

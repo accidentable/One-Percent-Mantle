@@ -1,5 +1,4 @@
 import React, { useState, useMemo } from 'react';
-import { Mic2 } from 'lucide-react';
 import { MOCK_ARTISTS } from '../data/artists';
 import { ArtistCard } from './ArtistCard';
 import { FilterBar } from './FilterBar';
@@ -29,27 +28,30 @@ export const FundingPage: React.FC<FundingPageProps> = ({ onArtistSelect }) => {
           onSelectCategory={setActiveCategory} 
         />
 
-      <div className="max-w-[1600px] mx-auto px-6 sm:px-12 py-12">
+      <div className="max-w-[1600px] mx-auto px-6 sm:px-12 py-16">
         {/* Editorial Header */}
-        <div className="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-white/10 pb-8">
-          <div>
-            <div className="flex items-center gap-3 mb-4">
-               <div className="p-3 bg-white text-black rounded-full">
-                  <Mic2 className="w-6 h-6" />
-               </div>
-               <span className="text-sm font-bold tracking-[0.3em] uppercase text-gray-500">Division 01</span>
+        <div className="flex flex-col md:flex-row justify-between items-end mb-24 border-b border-white/10 pb-12">
+          <div className="space-y-6">
+            <div className="flex items-center gap-4">
+               <span className="text-[10px] font-black tracking-[0.4em] uppercase text-white bg-white/10 px-3 py-1">Division 01</span>
+               <span className="text-[10px] font-bold tracking-[0.4em] uppercase text-gray-600">Official Roster</span>
             </div>
-            <h2 className="text-6xl md:text-8xl font-black text-white tracking-tighter uppercase leading-none">
-              Trainee<br/>Roster
+            <h2 className="text-7xl md:text-9xl font-black text-white tracking-tighter uppercase leading-[0.8] italic">
+              Trainee<br/><span className="text-gray-600 not-italic">Archive</span>
             </h2>
           </div>
-          <p className="text-gray-400 font-light max-w-md text-right mt-6 md:mt-0">
-             {t.hero.labDesc}
-          </p>
+          <div className="max-w-md text-right mt-12 md:mt-0">
+             <p className="text-gray-500 text-sm font-light leading-relaxed uppercase tracking-wider mb-4">
+                Global Talent Incubation System
+             </p>
+             <p className="text-gray-300 text-lg font-light leading-relaxed italic">
+                {t.hero.labDesc}
+             </p>
+          </div>
         </div>
 
         {/* Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-12 gap-y-24">
           {fundingArtists.map((artist) => (
             <ArtistCard 
               key={artist.id} 
